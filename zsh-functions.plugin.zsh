@@ -57,3 +57,41 @@ gpg_decode () {
   echo "$1" | base64 --decode | gpg
 }
 
+## Executable search path
+export PATH=/usr/local/sbin:$PATH
+export PATH=$HOME/.local/bin:$PATH
+export PATH=$HOME/.local/sbin:$PATH
+
+## Export time
+export DATE=$(date +%Y-%m-%d)
+
+
+## Make ISO image. Query values interactively.
+
+mkiso() {
+	echo "Enter volume name:"
+	read volume
+	echo "Enter ISO Name (ie. tmp.iso):"
+	read iso
+	echo "Enter input directory or file:"
+	read files
+	echo "Building '$HOME/$iso'"
+	mkisofs -o ~/$iso -A $volume -allow-multidot -J -R -iso-level 3 -V $volume -R $files
+}
+
+## reload terminal session
+reload() {
+	if [[ "$#*" -eq 0 ]] ; then
+		[[ -r ~/.zshrc ]] && . ~/.zshrc
+	else
+		local function
+		for function in "$@"; do
+			unfunction $function
+			autoload -U $funtion
+		done
+	fi
+}
+
+      
+
+        
